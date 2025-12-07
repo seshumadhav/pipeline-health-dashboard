@@ -65,6 +65,11 @@ class StageMetrics:
     queue_depths: List[int] = field(default_factory=list)
     errors: int = 0
 
+    def record_latency(self, latency_ms: float) -> None:
+        """
+        Record per-event processing latency in milliseconds.
+        """
+        self.latencies_ms.append(latency_ms)
 
 @dataclass
 class Stage:
@@ -93,3 +98,15 @@ class Stage:
         Record the current queue depth for observability.
         """
         self.metrics.queue_depths.append(len(self.queue))
+
+def compute_percentile(values: list[float], percentile: float) -> float:
+    """
+    Compute a percentile from a list of values.
+    """
+    if not values:
+        return 0.0
+
+    values = sorted(values)
+    idx = int(len(values) * percentile)
+    idx = min(idx, len(values) - 1)
+    return values[idx]

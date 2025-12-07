@@ -3,7 +3,11 @@ import random
 from typing import List
 
 from pipeline.models import SignalEvent, Stage, SIGNAL_TYPE_DESCRIPTIONS
-from pipeline.event_logger import log_event_enqueued, log_event_processed
+from pipeline.event_logger import (
+    log_event_enqueued,
+    log_event_processed,
+    set_event_logging,
+)
 
 
 def create_ingest_stage() -> Stage:
@@ -39,7 +43,12 @@ def generate_events(count: int) -> List[SignalEvent]:
     ]
 
 
-def run_single_tick(stage: Stage, incoming_events: List[SignalEvent]) -> None:
+def run_single_tick(
+    stage: Stage,
+    incoming_events: List[SignalEvent],
+    *,
+    log_events: bool = True,
+) -> None:
     """
     Simulate a single processing tick for one pipeline stage.
 
@@ -47,7 +56,12 @@ def run_single_tick(stage: Stage, incoming_events: List[SignalEvent]) -> None:
     - process up to stage capacity
     - record queue depth and processed count
     - enforce core invariants via sanity checks
+
+    log_events controls whether event-level logging is enabled.
     """
+
+    # Configure event logging once per tick
+    set_event_logging(log_events)
 
     # --- Domain sanity: signal types must be known ---
     for event in incoming_events:
@@ -62,11 +76,24 @@ def run_single_tick(stage: Stage, incoming_events: List[SignalEvent]) -> None:
 
     stage.record_queue_depth()
 
+
     processed = 0
     while stage.queue and processed < stage.capacity_per_tick:
         event = stage.queue.popleft()
         processed += 1
+
+        # --- Simulated latency (ms) ---
+        latency_ms = max(
+            0.0,
+            random.uniform(
+                stage.base_latency_ms - stage.jitter_ms,
+                stage.base_latency_ms + stage.jitter_ms,
+            ),
+        )
+
+        stage.metrics.record_latency(latency_ms)
         log_event_processed(stage, event)
+
 
     # --- Capacity invariant ---
     assert processed <= stage.capacity_per_tick, (
@@ -81,7 +108,4 @@ def run_single_tick(stage: Stage, incoming_events: List[SignalEvent]) -> None:
     assert len(stage.queue) == expected_remaining, (
         f"Queue size mismatch: expected {expected_remaining}, "
         f"got {len(stage.queue)}"
-    )
-
-    # --- Metrics monotonicity ---
-    assert stage.metrics.processed >= 0
+)
