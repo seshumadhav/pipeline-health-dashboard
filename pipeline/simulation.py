@@ -3,6 +3,7 @@ import random
 from typing import List
 
 from pipeline.models import SignalEvent, Stage, SIGNAL_TYPE_DESCRIPTIONS
+from pipeline.event_logger import log_event_enqueued, log_event_processed
 
 
 def create_ingest_stage() -> Stage:
@@ -57,13 +58,15 @@ def run_single_tick(stage: Stage, incoming_events: List[SignalEvent]) -> None:
     # Enqueue all incoming events
     for event in incoming_events:
         stage.enqueue(event)
+        log_event_enqueued(stage, event)
 
     stage.record_queue_depth()
 
     processed = 0
     while stage.queue and processed < stage.capacity_per_tick:
-        stage.queue.popleft()
+        event = stage.queue.popleft()
         processed += 1
+        log_event_processed(stage, event)
 
     # --- Capacity invariant ---
     assert processed <= stage.capacity_per_tick, (
