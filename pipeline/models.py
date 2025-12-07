@@ -1,44 +1,51 @@
 from dataclasses import dataclass, field
-from typing import Deque, List
+from typing import Deque, List, Dict
 from collections import deque
 import time
 
 
-@dataclass
-class Event:
-    """
-    Represents a unit of work flowing through the pipeline.
+# Domain-level reference for signal semantics.
+# This is illustrative and intentionally technology-agnostic.
+SIGNAL_TYPE_DESCRIPTIONS: Dict[str, str] = {
+    "sales_activity": (
+        "Direct commercial or transactional signals reflecting sales execution. "
+        "Examples include: "
+        "1) a distributor order placed or updated for a specific SKU, "
+        "2) point-of-sale movement showing units sold at a retail location."
+    ),
+    "field_interaction": (
+        "Qualitative or semi-structured observations captured from the field. "
+        "Examples include: "
+        "1) sales rep notes or store feedback after a visit, "
+        "2) compliance checks such as display presence or planogram adherence."
+    ),
+    "market_signal": (
+        "External or aggregated indicators describing broader market conditions. "
+        "Examples include: "
+        "1) category-level trends (e.g., premium spirits growth in a region), "
+        "2) competitive activity such as rival promotions or pricing changes."
+    ),
+}
 
-    An Event is created at ingestion time and moves through each
+
+@dataclass
+class SignalEvent:
+    """
+    Represents a unit of signal flowing through the pipeline.
+
+    A SignalEvent is created at ingestion time and moves through each
     pipeline stage (ingest → normalize → enrich → store → serve).
 
-    Conceptually, an event could represent:
-      - a point-of-sale signal
-      - a field sales interaction
-      - a social or market signal tied to a product, brand, or region
-      - a derived analytical observation used for downstream insights
+    signal_type indicates the semantic nature of the signal.
+    See SIGNAL_TYPE_DESCRIPTIONS for illustrative meanings and examples.
 
-    This class intentionally keeps the event structure minimal.
-    In real systems, the payload would vary by use case and evolve
-    over time as the platform matures.
-
-    Example (illustrative only):
-        >>> event = Event(id=987654)
-        >>> event.id
-        987654
-        >>> isinstance(event.created_at, float)
-        True
-
-        # Conceptual payload example (not modeled here):
-        # {
-        #   "brand": "Example Spirits Co.",
-        #   "product": "Premium Vodka",
-        #   "location": "Austin, TX",
-        #   "signal_type": "sales_activity",
-        #   "timestamp": "2025-01-03T18:42:11Z"
-        # }
+    Example:
+        >>> event = SignalEvent(id=123, signal_type="sales_activity")
+        >>> event.signal_type
+        'sales_activity'
     """
     id: int
+    signal_type: str
     created_at: float = field(default_factory=time.time)
 
 
@@ -47,28 +54,11 @@ class StageMetrics:
     """
     Metrics collected for a pipeline stage over time.
 
-    These metrics are intentionally simple, but they are the
-    leading indicators for operational health in data platforms:
+    These metrics surface early indicators of operational health:
       - throughput degradation
       - tail-latency creep
-      - queue buildup and backpressure
-      - silent correctness risks
-
-    In analytics systems, issues at this layer often surface
-    indirectly as:
-      - delayed dashboards
-      - stale insights
-      - inconsistent regional or product-level reporting
-      - loss of trust from downstream consumers
-
-    Example:
-        >>> metrics = StageMetrics()
-        >>> metrics.processed
-        0
-        >>> metrics.latencies_ms.append(18.2)
-        >>> metrics.queue_depths.append(7)
-        >>> metrics.errors
-        0
+      - queue buildup
+      - correctness risks
     """
     processed: int = 0
     latencies_ms: List[float] = field(default_factory=list)
@@ -79,44 +69,20 @@ class StageMetrics:
 @dataclass
 class Stage:
     """
-    Represents a pipeline stage such as ingest, normalize, enrich,
-    store, or serve.
+    Represents a pipeline stage such as ingest, normalize, enrich, store, or serve.
 
-    Each stage models a real operational boundary in a data platform:
-      - ingest: accepting external signals
-      - normalize: cleaning and standardizing inputs
-      - enrich: joining with reference or contextual data
-      - store: persisting analytical representations
-      - serve: powering downstream APIs, dashboards, or exports
-
-    The goal is not to mimic a specific implementation, but to
-    capture the universal dynamics that cause data pipelines
-    to succeed or fail: capacity limits, latency variance,
-    queue buildup, and partial degradation.
-
-    Example:
-        >>> stage = Stage(
-        ...     name="enrich",
-        ...     capacity_per_tick=500,
-        ...     base_latency_ms=8.0,
-        ...     jitter_ms=4.0
-        ... )
-        >>> stage.name
-        'enrich'
-        >>> stage.capacity_per_tick
-        500
-        >>> len(stage.queue)
-        0
+    Each stage models a real operational boundary where capacity limits,
+    latency variance, and partial failures can emerge.
     """
     name: str
     capacity_per_tick: int
     base_latency_ms: float
     jitter_ms: float
 
-    queue: Deque[Event] = field(default_factory=deque)
+    queue: Deque[SignalEvent] = field(default_factory=deque)
     metrics: StageMetrics = field(default_factory=StageMetrics)
 
-    def enqueue(self, event: Event) -> None:
+    def enqueue(self, event: SignalEvent) -> None:
         """
         Add an event to the stage's processing queue.
         """
