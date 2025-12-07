@@ -45,7 +45,16 @@ def run_single_tick(stage: Stage, incoming_events: List[SignalEvent]) -> None:
     - enqueue incoming events
     - process up to stage capacity
     - record queue depth and processed count
+    - enforce core invariants via sanity checks
     """
+
+    # --- Domain sanity: signal types must be known ---
+    for event in incoming_events:
+        assert event.signal_type in SIGNAL_TYPE_DESCRIPTIONS, (
+            f"Unknown signal type: {event.signal_type}"
+        )
+
+    # Enqueue all incoming events
     for event in incoming_events:
         stage.enqueue(event)
 
@@ -56,4 +65,20 @@ def run_single_tick(stage: Stage, incoming_events: List[SignalEvent]) -> None:
         stage.queue.popleft()
         processed += 1
 
+    # --- Capacity invariant ---
+    assert processed <= stage.capacity_per_tick, (
+        f"Processed {processed} events, exceeding capacity "
+        f"{stage.capacity_per_tick} for stage {stage.name}"
+    )
+
     stage.metrics.processed += processed
+
+    # --- Queue correctness invariant ---
+    expected_remaining = max(0, len(incoming_events) - stage.capacity_per_tick)
+    assert len(stage.queue) == expected_remaining, (
+        f"Queue size mismatch: expected {expected_remaining}, "
+        f"got {len(stage.queue)}"
+    )
+
+    # --- Metrics monotonicity ---
+    assert stage.metrics.processed >= 0
