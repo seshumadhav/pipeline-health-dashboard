@@ -19,8 +19,15 @@ def run_live_simulation(ticks: int = 10) -> None:
     pipeline = create_pipeline()
 
     for tick in range(1, ticks + 1):
-        print(f"\nTICK {tick}")
-        print("----------------------------------------")
+        print(f"\nTICK {tick}", flush=True)
+        print("----------------------------------------", flush=True)
+
+        # Simulate enrichment degradation starting at tick 4
+        # (e.g., heavier ML inference, slower API, costlier analytical query)
+        if tick >= 4:
+            for stage in pipeline.stages:
+                if stage.name == "enrich":
+                    stage.slowdown_factor = 2.5
 
         incoming_events = generate_events(200)
         pipeline.tick(incoming_events)

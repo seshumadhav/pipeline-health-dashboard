@@ -64,8 +64,10 @@ def run_single_tick(
 
     stage.record_queue_depth()
 
+    effective_capacity = int(stage.capacity_per_tick / stage.slowdown_factor)
+
     processed = 0
-    while stage.queue and processed < stage.capacity_per_tick:
+    while stage.queue and processed < effective_capacity:
         event = stage.queue.popleft()
         processed += 1
 
@@ -81,9 +83,9 @@ def run_single_tick(
         log_event_processed(stage, event)
 
     # --- Capacity invariant ---
-    assert processed <= stage.capacity_per_tick, (
-        f"Processed {processed} events, exceeding capacity "
-        f"{stage.capacity_per_tick} for stage {stage.name}"
+    assert processed <= effective_capacity, (
+        f"Processed {processed} events, exceeding effective capacity "
+        f"{effective_capacity} for stage {stage.name}"
     )
 
     stage.metrics.processed += processed

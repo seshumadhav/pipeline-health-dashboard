@@ -86,6 +86,7 @@ class Stage:
 
     queue: Deque[SignalEvent] = field(default_factory=deque)
     metrics: StageMetrics = field(default_factory=StageMetrics)
+    slowdown_factor: float = 1.0
 
     def enqueue(self, event: SignalEvent) -> None:
         """
