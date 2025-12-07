@@ -1,4 +1,5 @@
 import argparse
+from pipeline.dashboard import render_dashboard
 
 def main():
     parser = argparse.ArgumentParser(
@@ -14,7 +15,7 @@ def main():
     args = parser.parse_args()
 
     if args.command == "run":
-        print("Pipeline Health Dashboard")
+        render_dashboard()
 
 if __name__ == "__main__":
     main()
