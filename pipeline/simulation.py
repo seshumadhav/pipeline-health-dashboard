@@ -25,11 +25,6 @@ def create_ingest_stage() -> Stage:
 def generate_events(count: int) -> List[SignalEvent]:
     """
     Generate a mixed stream of signal events.
-
-    Signal types are illustrative and domain-relevant:
-      - sales_activity
-      - field_interaction
-      - market_signal
     """
     now = time.time()
     signal_types = list(SIGNAL_TYPE_DESCRIPTIONS.keys())
@@ -48,41 +43,32 @@ def run_single_tick(
     incoming_events: List[SignalEvent],
     *,
     log_events: bool = True,
+    enforce_queue_invariant: bool = True,
 ) -> None:
     """
     Simulate a single processing tick for one pipeline stage.
-
-    - enqueue incoming events
-    - process up to stage capacity
-    - record queue depth and processed count
-    - enforce core invariants via sanity checks
-
-    log_events controls whether event-level logging is enabled.
     """
 
-    # Configure event logging once per tick
     set_event_logging(log_events)
 
-    # --- Domain sanity: signal types must be known ---
+    # --- Domain sanity ---
     for event in incoming_events:
         assert event.signal_type in SIGNAL_TYPE_DESCRIPTIONS, (
             f"Unknown signal type: {event.signal_type}"
         )
 
-    # Enqueue all incoming events
+    # Enqueue
     for event in incoming_events:
         stage.enqueue(event)
         log_event_enqueued(stage, event)
 
     stage.record_queue_depth()
 
-
     processed = 0
     while stage.queue and processed < stage.capacity_per_tick:
         event = stage.queue.popleft()
         processed += 1
 
-        # --- Simulated latency (ms) ---
         latency_ms = max(
             0.0,
             random.uniform(
@@ -94,7 +80,6 @@ def run_single_tick(
         stage.metrics.record_latency(latency_ms)
         log_event_processed(stage, event)
 
-
     # --- Capacity invariant ---
     assert processed <= stage.capacity_per_tick, (
         f"Processed {processed} events, exceeding capacity "
@@ -103,9 +88,12 @@ def run_single_tick(
 
     stage.metrics.processed += processed
 
-    # --- Queue correctness invariant ---
-    expected_remaining = max(0, len(incoming_events) - stage.capacity_per_tick)
-    assert len(stage.queue) == expected_remaining, (
-        f"Queue size mismatch: expected {expected_remaining}, "
-        f"got {len(stage.queue)}"
-)
+    # --- Queue invariant (single-stage ONLY) ---
+    if enforce_queue_invariant:
+        expected_remaining = max(
+            0, len(incoming_events) - stage.capacity_per_tick
+        )
+        assert len(stage.queue) == expected_remaining, (
+            f"Queue size mismatch: expected {expected_remaining}, "
+            f"got {len(stage.queue)}"
+        )
