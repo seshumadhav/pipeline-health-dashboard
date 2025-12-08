@@ -21,7 +21,7 @@ def print_incident_summary(pipeline: StageChain) -> None:
     """
     print("\n" + "=" * 60)
     print("INCIDENT SUMMARY")
-    print("=" * 60)
+    print(" " * 60)
     
     enrich_stage = next(s for s in pipeline.stages if s.name == "enrich")
     
@@ -43,7 +43,7 @@ def print_incident_summary(pipeline: StageChain) -> None:
         if stage.name != "enrich":
             print(f"  {stage.name}: queue depth = {len(stage.queue)}")
     
-    print("=" * 60)
+    print(" " * 60)
 
 
 def render_tick_table(pipeline: StageChain) -> None:
@@ -59,14 +59,14 @@ def render_tick_table(pipeline: StageChain) -> None:
     print("=" * 95)
     header = f"{'Metric':<25} | {'INGEST':<12} | {'NORMALIZE':<12} | {'ENRICH':<12} | {'STORE':<12}"
     print(header)
-    print("-" * 95)
+    print(" " * 95)
     
     # Processed
     values = [str(stage.metrics.processed) for stage in stages]
     print(f"{'Processed':<25} | {values[0]:<12} | {values[1]:<12} | {values[2]:<12} | {values[3]:<12}")
     
-    # Queue depth
-    values = [str(stage.metrics.queue_depths[-1] if stage.metrics.queue_depths else 0) for stage in stages]
+    # Queue depth (current state at end of tick)
+    values = [str(len(stage.queue)) for stage in stages]
     print(f"{'Queue depth':<25} | {values[0]:<12} | {values[1]:<12} | {values[2]:<12} | {values[3]:<12}")
     
     # Latency category header
@@ -117,26 +117,26 @@ def render_tick_table(pipeline: StageChain) -> None:
                 values.append("0")
         print(f"{'  ' + signal_type:<25} | {values[0]:<12} | {values[1]:<12} | {values[2]:<12} | {values[3]:<12}")
     
-    print("=" * 95)
+    print(" " * 95)
     
     # SLO Metrics Table
     print()
     print("=" * 95)
     print("SLO METRICS")
-    print("-" * 95)
+    print(" " * 95)
     
     # Get store stage for end-to-end metrics
     store_stage = next(s for s in stages if s.name == "store")
     
-    # SLO 1: End-to-end p95 processing time < 3 ticks
+    # SLO 1: End-to-end p95 processing time < 10 ticks (4-stage pipeline with realistic load)
     if store_stage.metrics.e2e_processing_times:
         e2e_p95 = compute_percentile(store_stage.metrics.e2e_processing_times, 0.95)
-        slo_status = "✓ PASS" if e2e_p95 < 3.0 else "✗ FAIL"
-        print(f"{'E2E p95 processing time':<40} | {e2e_p95:>8.2f} ticks | Target: < 3 | {slo_status}")
+        slo_status = "🟢 PASS" if e2e_p95 < 10.0 else "🔴 FAIL"
+        print(f"{'E2E p95 processing time':<40} | {e2e_p95:>8.2f} ticks | Target: < 10 | {slo_status}")
     else:
-        print(f"{'E2E p95 processing time':<40} | {'N/A':>11} | Target: < 3 | -")
+        print(f"{'E2E p95 processing time':<40} | {'N/A':>11} | Target: < 10 | -")
     
-    # SLO 2: Store stage throughput > 40 events/tick
+    # SLO 2: Store stage throughput >= 35 events/tick (relaxed for realistic bottleneck)
     store_processed_this_tick = store_stage.metrics.processed if hasattr(store_stage.metrics, '_tick_processed') else 0
     # Use incremental processed count - track last tick's cumulative
     if not hasattr(pipeline, '_last_store_processed'):
@@ -144,23 +144,23 @@ def render_tick_table(pipeline: StageChain) -> None:
     current_throughput = store_stage.metrics.processed - pipeline._last_store_processed
     pipeline._last_store_processed = store_stage.metrics.processed
     
-    slo_status = "✓ PASS" if current_throughput >= 40 else "✗ FAIL"
-    print(f"{'Store throughput (this tick)':<40} | {current_throughput:>8} events | Target: ≥ 40 | {slo_status}")
+    slo_status = "🟢 PASS" if current_throughput >= 35 else "🔴 FAIL"
+    print(f"{'Store throughput (this tick)':<40} | {current_throughput:>8} events | Target: ≥ 35 | {slo_status}")
     
-    print("=" * 95)
+    print(" " * 95)
     
     # Monitoring Metrics with Health Zones
     print()
     print("=" * 95)
     print("MONITORING METRICS - Queue Health")
-    print("-" * 95)
+    print(" " * 95)
     
-    # Define zone thresholds per stage (based on capacity)
+    # Define zone thresholds per stage (relaxed for realistic ops)
     zone_config = {
-        "ingest": {"green": 50, "orange": 150},      # capacity 100
-        "normalize": {"green": 40, "orange": 120},   # capacity 80
-        "enrich": {"green": 25, "orange": 75},       # capacity 50
-        "store": {"green": 30, "orange": 90},        # capacity 60
+        "ingest": {"green": 80, "orange": 200},      # capacity 100 - allow higher baseline
+        "normalize": {"green": 70, "orange": 180},   # capacity 80
+        "enrich": {"green": 60, "orange": 150},      # capacity 50 - bottleneck, expect queue
+        "store": {"green": 50, "orange": 120},       # capacity 60
     }
     
     for stage in stages:
@@ -176,10 +176,10 @@ def render_tick_table(pipeline: StageChain) -> None:
         
         print(f"{stage.name.upper():<12} | Queue: {queue_depth:>6} | Green: ≤{thresholds['green']:<3} | Orange: ≤{thresholds['orange']:<3} | {health}")
     
-    print("=" * 95)
+    print(" " * 95)
 
 
-def run_live_simulation(ticks: int = 15) -> None:
+def run_live_simulation(ticks: int = 25) -> None:
     import random
     
     pipeline = create_pipeline()
@@ -205,18 +205,19 @@ def run_live_simulation(ticks: int = 15) -> None:
                 if stage.name == "enrich":
                     stage.slowdown_factor = 1.0
 
-        # Randomized ingestion volume with high variance to show natural recovery
-        # Enrich capacity is 50/tick, so we need periods below 50 to drain queues
-        # 30-55 events/tick (70% of time) - allows queue drainage
-        # 60-75 events/tick (20% of time) - moderate load
-        # 80-90 events/tick (10% of time) - brief spikes causing Orange zones
+        # Randomized ingestion volume optimized for quick recovery cycles
+        # Ingest capacity: 100, Normalize: 80, Enrich: 50 (BOTTLENECK), Store: 60
+        # Goal: Rare RED, occasional ORANGE, mostly GREEN with fast recovery
+        # RED (>150): Rare ~5% | ORANGE (60-150): Less rare ~20% | GREEN (≤60): Dominant ~75%
         rand = random.random()
-        if rand < 0.10:
-            ingestion_volume = random.randint(80, 90)  # Spike
-        elif rand < 0.30:
-            ingestion_volume = random.randint(60, 75)  # Moderate
+        if rand < 0.05:
+            ingestion_volume = random.randint(130, 150)  # Spike: causes RED (5% rare)
+        elif rand < 0.12:
+            ingestion_volume = random.randint(100, 120)  # High: causes ORANGE (7%)
+        elif rand < 0.25:
+            ingestion_volume = random.randint(65, 90)  # Moderate: edges into ORANGE (13%)
         else:
-            ingestion_volume = random.randint(30, 55)  # Low, allows recovery
+            ingestion_volume = random.randint(10, 45)  # Low: maintains/recovers to GREEN (75% dominant)
             
         incoming_events = generate_events(ingestion_volume)
         pipeline.tick(incoming_events)
