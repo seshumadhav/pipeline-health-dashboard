@@ -130,9 +130,9 @@ def render_tick_table(pipeline: StageChain) -> None:
     if store_stage.metrics.e2e_processing_times:
         e2e_p95 = compute_percentile(store_stage.metrics.e2e_processing_times, 0.95)
         slo_status = "🟢 PASS" if e2e_p95 < 10.0 else "🔴 FAIL"
-        print(f"{'E2E p95 processing time':<40} | {e2e_p95:>8.2f} ticks | Target: < 10 | {slo_status}")
+        print(f"E2E p95 processing time:  {e2e_p95:.2f} ticks | Target: < 10 | {slo_status}")
     else:
-        print(f"{'E2E p95 processing time':<40} | {'N/A':>11} | Target: < 10 | -")
+        print(f"E2E p95 processing time:         N/A | Target: < 10 | -")
     
     # SLO 2: Store stage throughput >= 35 events/tick (relaxed for realistic bottleneck)
     store_processed_this_tick = store_stage.metrics.processed if hasattr(store_stage.metrics, '_tick_processed') else 0
@@ -143,7 +143,7 @@ def render_tick_table(pipeline: StageChain) -> None:
     pipeline._last_store_processed = store_stage.metrics.processed
     
     slo_status = "🟢 PASS" if current_throughput >= 35 else "🔴 FAIL"
-    print(f"{'Store throughput (this tick)':<40} | {current_throughput:>8} events | Target: ≥ 35 | {slo_status}")
+    print(f"Store throughput (this tick):   {current_throughput} events | Target: ≥ 35 | {slo_status}")
     # Monitoring Metrics with Health Zones
     print()
     print("MONITORING METRICS - Queue Health")
