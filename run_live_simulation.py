@@ -46,6 +46,55 @@ def print_incident_summary(pipeline: StageChain) -> None:
     print(" " * 60)
 
 
+def print_tick_incident_summary(pipeline: StageChain, tick: int) -> None:
+    """
+    Print a summary of any violations (SLO FAIL or RED zones) detected in this tick.
+    """
+    violations = []
+    
+    # Check SLO violations
+    store_stage = next(s for s in pipeline.stages if s.name == "store")
+    
+    # Check E2E p95 processing time SLO
+    if store_stage.metrics.e2e_processing_times:
+        e2e_p95 = compute_percentile(store_stage.metrics.e2e_processing_times, 0.95)
+        if e2e_p95 >= 10.0:
+            violations.append(f"E2E p95 processing time: {e2e_p95:.2f} ticks (Target: < 10)")
+    
+    # Check store throughput SLO - use the SAME logic as the main display
+    if not hasattr(pipeline, '_last_store_processed_incident'):
+        pipeline._last_store_processed_incident = 0
+    current_throughput = store_stage.metrics.processed - pipeline._last_store_processed_incident
+    pipeline._last_store_processed_incident = store_stage.metrics.processed
+    
+    if current_throughput < 35:
+        violations.append(f"Store throughput: {current_throughput} events (Target: ≥ 35)")
+    
+    # Check RED zone violations - use the SAME thresholds as monitoring
+    zone_config = {
+        "ingest": {"green": 80, "orange": 200},      # capacity 100 - allow higher baseline
+        "normalize": {"green": 70, "orange": 180},   # capacity 80
+        "enrich": {"green": 60, "orange": 150},      # capacity 50 - bottleneck, expect queue
+        "store": {"green": 50, "orange": 120},       # capacity 60
+    }
+    
+    for stage in pipeline.stages:
+        queue_depth = len(stage.queue)
+        thresholds = zone_config.get(stage.name, {"green": 50, "orange": 150})
+        
+        if queue_depth > thresholds["orange"]:
+            violations.append(f"{stage.name.upper()} queue: {queue_depth} events (RED zone > {thresholds['orange']})")
+    
+    # Print violations if any
+    if violations:
+        print()
+        print("🚨 INCIDENT SUMMARY - TICK " + str(tick))
+        print("---")
+        for violation in violations:
+            print(f"  ⚠️  {violation}")
+        print()
+
+
 def render_tick_table(pipeline: StageChain) -> None:
     """
     Render pipeline health as a compact table.
@@ -244,6 +293,9 @@ def run_live_simulation(ticks: int = 25) -> None:
         pipeline.tick(incoming_events)
 
         render_tick_table(pipeline)
+        
+        # Generate incident summary for violations in this tick
+        print_tick_incident_summary(pipeline, tick)
 
         time.sleep(0.4)  # slow enough for humans to watch
     
