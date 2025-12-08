@@ -179,28 +179,45 @@ def render_tick_table(pipeline: StageChain) -> None:
     print("=" * 95)
 
 
-def run_live_simulation(ticks: int = 10) -> None:
+def run_live_simulation(ticks: int = 15) -> None:
     import random
     
     pipeline = create_pipeline()
     
-    # Randomize when degradation starts (tick 4-6)
+    # Randomize degradation window: starts tick 4-6, lasts only 2 ticks, then recovers
     degradation_start_tick = random.randint(4, 6)
-    # Randomize slowdown factor (1.3x - 1.8x for realistic degradation)
-    slowdown_factor = random.uniform(1.3, 1.8)
+    degradation_duration = 2  # Short degradation window
+    # Very small slowdown factor (1.05x - 1.15x) to stay mostly in Orange, rarely RED
+    slowdown_factor = random.uniform(1.05, 1.15)
 
     for tick in range(1, ticks + 1):
         print(f"\nTICK {tick}", flush=True)
 
-        # Simulate enrichment degradation with randomized timing and severity
+        # Simulate enrichment degradation with recovery
         # (e.g., heavier ML inference, slower API, costlier analytical query)
-        if tick >= degradation_start_tick:
+        if degradation_start_tick <= tick < degradation_start_tick + degradation_duration:
             for stage in pipeline.stages:
                 if stage.name == "enrich":
                     stage.slowdown_factor = slowdown_factor
+        else:
+            # Recovery: reset to normal (1.0 = no slowdown)
+            for stage in pipeline.stages:
+                if stage.name == "enrich":
+                    stage.slowdown_factor = 1.0
 
-        # Randomized ingestion volume (70-130 events/tick) for realistic traffic variance
-        ingestion_volume = random.randint(70, 130)
+        # Randomized ingestion volume with high variance to show natural recovery
+        # Enrich capacity is 50/tick, so we need periods below 50 to drain queues
+        # 30-55 events/tick (70% of time) - allows queue drainage
+        # 60-75 events/tick (20% of time) - moderate load
+        # 80-90 events/tick (10% of time) - brief spikes causing Orange zones
+        rand = random.random()
+        if rand < 0.10:
+            ingestion_volume = random.randint(80, 90)  # Spike
+        elif rand < 0.30:
+            ingestion_volume = random.randint(60, 75)  # Moderate
+        else:
+            ingestion_volume = random.randint(30, 55)  # Low, allows recovery
+            
         incoming_events = generate_events(ingestion_volume)
         pipeline.tick(incoming_events)
 
