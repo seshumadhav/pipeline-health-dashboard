@@ -26,10 +26,10 @@ def print_incident_summary(pipeline: StageChain) -> None:
     enrich_stage = next(s for s in pipeline.stages if s.name == "enrich")
     
     if enrich_stage.slowdown_factor > 1.0:
-        print(f"Bottleneck: {enrich_stage.name} stage (slowdown factor: {enrich_stage.slowdown_factor}x)")
+        print(f"Bottleneck: {enrich_stage.name} stage (slowdown factor: {enrich_stage.slowdown_factor:.2f}x)")
         print(f"  Effective capacity reduced from 50 to ~{int(50/enrich_stage.slowdown_factor)} events/tick")
     else:
-        print(f"Stage: {enrich_stage.name} (slowdown factor: {enrich_stage.slowdown_factor}x - no slowdown)")
+        print(f"Stage: {enrich_stage.name} (slowdown factor: {enrich_stage.slowdown_factor:.2f}x - no slowdown)")
     
     print(f"  Final queue depth: {len(enrich_stage.queue)} events")
     
@@ -180,19 +180,28 @@ def render_tick_table(pipeline: StageChain) -> None:
 
 
 def run_live_simulation(ticks: int = 10) -> None:
+    import random
+    
     pipeline = create_pipeline()
+    
+    # Randomize when degradation starts (tick 4-6)
+    degradation_start_tick = random.randint(4, 6)
+    # Randomize slowdown factor (1.3x - 1.8x for realistic degradation)
+    slowdown_factor = random.uniform(1.3, 1.8)
 
     for tick in range(1, ticks + 1):
         print(f"\nTICK {tick}", flush=True)
 
-        # Simulate enrichment degradation starting at tick 4
+        # Simulate enrichment degradation with randomized timing and severity
         # (e.g., heavier ML inference, slower API, costlier analytical query)
-        if tick >= 4:
+        if tick >= degradation_start_tick:
             for stage in pipeline.stages:
                 if stage.name == "enrich":
-                    stage.slowdown_factor = 2.5
+                    stage.slowdown_factor = slowdown_factor
 
-        incoming_events = generate_events(200)
+        # Randomized ingestion volume (70-130 events/tick) for realistic traffic variance
+        ingestion_volume = random.randint(70, 130)
+        incoming_events = generate_events(ingestion_volume)
         pipeline.tick(incoming_events)
 
         render_tick_table(pipeline)
