@@ -88,10 +88,16 @@ def print_tick_incident_summary(pipeline: StageChain, tick: int) -> None:
     # Print violations if any
     if violations:
         print()
-        print("🚨 INCIDENT SUMMARY - TICK " + str(tick))
+        print("INCIDENT SUMMARY - TICK " + str(tick))
         print("---")
         for violation in violations:
             print(f"  ⚠️  {violation}")
+        print()
+    else:
+        print()
+        print("INCIDENT SUMMARY - TICK " + str(tick))
+        print("---")
+        print("No incidents")
         print()
 
 
