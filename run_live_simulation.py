@@ -1,6 +1,6 @@
 import time
 
-from pipeline.models import Stage
+from pipeline.models import Stage, compute_percentile
 from pipeline.pipeline_chain import StageChain
 from pipeline.simulation import generate_events
 from pipeline.dashboard import render_dashboard
@@ -15,12 +15,119 @@ def create_pipeline() -> StageChain:
     ])
 
 
+def print_incident_summary(pipeline: StageChain) -> None:
+    """
+    Print a brief operational summary showing degradation impact.
+    """
+    print("\n" + "=" * 60)
+    print("INCIDENT SUMMARY")
+    print("=" * 60)
+    
+    enrich_stage = next(s for s in pipeline.stages if s.name == "enrich")
+    
+    if enrich_stage.slowdown_factor > 1.0:
+        print(f"Bottleneck: {enrich_stage.name} stage (slowdown factor: {enrich_stage.slowdown_factor}x)")
+        print(f"  Effective capacity reduced from 50 to ~{int(50/enrich_stage.slowdown_factor)} events/tick")
+    else:
+        print(f"Stage: {enrich_stage.name} (slowdown factor: {enrich_stage.slowdown_factor}x - no slowdown)")
+    
+    print(f"  Final queue depth: {len(enrich_stage.queue)} events")
+    
+    if enrich_stage.metrics.latencies_ms:
+        p95 = compute_percentile(enrich_stage.metrics.latencies_ms, 0.95)
+        p99 = compute_percentile(enrich_stage.metrics.latencies_ms, 0.99)
+        print(f"  Latency p95/p99: {p95:.2f}/{p99:.2f} ms")
+    
+    print("Backpressure propagation:")
+    for stage in pipeline.stages:
+        if stage.name != "enrich":
+            print(f"  {stage.name}: queue depth = {len(stage.queue)}")
+    
+    print("=" * 60)
+
+
+def render_tick_table(pipeline: StageChain) -> None:
+    """
+    Render pipeline health as a compact table.
+    """
+    from collections import Counter
+    
+    stages = pipeline.stages
+    
+    # Header
+    print()
+    print("=" * 95)
+    header = f"{'Metric':<25} | {'INGEST':<12} | {'NORMALIZE':<12} | {'ENRICH':<12} | {'STORE':<12}"
+    print(header)
+    print("-" * 95)
+    
+    # Processed
+    values = [str(stage.metrics.processed) for stage in stages]
+    print(f"{'Processed':<25} | {values[0]:<12} | {values[1]:<12} | {values[2]:<12} | {values[3]:<12}")
+    
+    # Queue depth
+    values = [str(stage.metrics.queue_depths[-1] if stage.metrics.queue_depths else 0) for stage in stages]
+    print(f"{'Queue depth':<25} | {values[0]:<12} | {values[1]:<12} | {values[2]:<12} | {values[3]:<12}")
+    
+    # Latency category header
+    print(f"{'Latency':<25} | {'':<12} | {'':<12} | {'':<12} | {'':<12}")
+    
+    # Latency p50
+    values = []
+    for stage in stages:
+        if stage.metrics.latencies_ms:
+            p50 = compute_percentile(stage.metrics.latencies_ms, 0.50)
+            values.append(f"{p50:.2f}")
+        else:
+            values.append("-")
+    print(f"{'  p50 (ms)':<25} | {values[0]:<12} | {values[1]:<12} | {values[2]:<12} | {values[3]:<12}")
+    
+    # Latency p95
+    values = []
+    for stage in stages:
+        if stage.metrics.latencies_ms:
+            p95 = compute_percentile(stage.metrics.latencies_ms, 0.95)
+            values.append(f"{p95:.2f}")
+        else:
+            values.append("-")
+    print(f"{'  p95 (ms)':<25} | {values[0]:<12} | {values[1]:<12} | {values[2]:<12} | {values[3]:<12}")
+    
+    # Latency p99
+    values = []
+    for stage in stages:
+        if stage.metrics.latencies_ms:
+            p99 = compute_percentile(stage.metrics.latencies_ms, 0.99)
+            values.append(f"{p99:.2f}")
+        else:
+            values.append("-")
+    print(f"{'  p99 (ms)':<25} | {values[0]:<12} | {values[1]:<12} | {values[2]:<12} | {values[3]:<12}")
+    
+    # Signals category header
+    print(f"{'Signals':<25} | {'':<12} | {'':<12} | {'':<12} | {'':<12}")
+    
+    # Signal types
+    for signal_type in ["field_interaction", "market_signal", "sales_activity"]:
+        values = []
+        for stage in stages:
+            if stage.queue:
+                type_counts = Counter(e.signal_type for e in stage.queue)
+                count = type_counts.get(signal_type, 0)
+                values.append(str(count))
+            else:
+                values.append("0")
+        print(f"{'  ' + signal_type:<25} | {values[0]:<12} | {values[1]:<12} | {values[2]:<12} | {values[3]:<12}")
+    
+    # Status
+    print(f"{'Status':<25} | {'OK':<12} | {'OK':<12} | {'OK':<12} | {'OK':<12}")
+    
+    print("=" * 95)
+
+
 def run_live_simulation(ticks: int = 10) -> None:
     pipeline = create_pipeline()
 
     for tick in range(1, ticks + 1):
         print(f"\nTICK {tick}", flush=True)
-        print("----------------------------------------", flush=True)
 
         # Simulate enrichment degradation starting at tick 4
         # (e.g., heavier ML inference, slower API, costlier analytical query)
@@ -32,11 +139,12 @@ def run_live_simulation(ticks: int = 10) -> None:
         incoming_events = generate_events(200)
         pipeline.tick(incoming_events)
 
-        for stage in pipeline.stages:
-            render_dashboard(stage)
-            print()
+        render_tick_table(pipeline)
 
         time.sleep(0.4)  # slow enough for humans to watch
+    
+    # Print incident summary after simulation completes
+    print_incident_summary(pipeline)
 
 
 if __name__ == "__main__":
