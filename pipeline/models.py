@@ -47,6 +47,7 @@ class SignalEvent:
     id: int
     signal_type: str
     created_at: float = field(default_factory=time.time)
+    ingestion_tick: int = 0  # Tick when event entered the pipeline
 
 
 @dataclass
@@ -64,12 +65,19 @@ class StageMetrics:
     latencies_ms: List[float] = field(default_factory=list)
     queue_depths: List[int] = field(default_factory=list)
     errors: int = 0
+    e2e_processing_times: List[int] = field(default_factory=list)  # Ticks from ingestion to completion
 
     def record_latency(self, latency_ms: float) -> None:
         """
         Record per-event processing latency in milliseconds.
         """
         self.latencies_ms.append(latency_ms)
+    
+    def record_e2e_processing_time(self, processing_ticks: int) -> None:
+        """
+        Record end-to-end processing time from ingestion to stage completion in ticks.
+        """
+        self.e2e_processing_times.append(processing_ticks)
 
 @dataclass
 class Stage:
@@ -87,6 +95,7 @@ class Stage:
     queue: Deque[SignalEvent] = field(default_factory=deque)
     metrics: StageMetrics = field(default_factory=StageMetrics)
     slowdown_factor: float = 1.0
+    output_buffer: List[SignalEvent] = field(default_factory=list)  # Events processed this tick, available next tick
 
     def enqueue(self, event: SignalEvent) -> None:
         """

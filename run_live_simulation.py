@@ -125,26 +125,56 @@ def render_tick_table(pipeline: StageChain) -> None:
     print("SLO METRICS")
     print("-" * 95)
     
-    # SLO 1: End-to-end latency p95 < 10ms
-    e2e_latencies = []
-    for stage in stages:
-        e2e_latencies.extend(stage.metrics.latencies_ms)
-    if e2e_latencies:
-        e2e_p95 = compute_percentile(e2e_latencies, 0.95)
-        slo_status = "✓ PASS" if e2e_p95 < 10.0 else "✗ FAIL"
-        print(f"{'End-to-end p95 latency':<40} | {e2e_p95:>8.2f} ms | Target: < 10ms | {slo_status}")
+    # Get store stage for end-to-end metrics
+    store_stage = next(s for s in stages if s.name == "store")
+    
+    # SLO 1: End-to-end p95 processing time < 3 ticks
+    if store_stage.metrics.e2e_processing_times:
+        e2e_p95 = compute_percentile(store_stage.metrics.e2e_processing_times, 0.95)
+        slo_status = "✓ PASS" if e2e_p95 < 3.0 else "✗ FAIL"
+        print(f"{'E2E p95 processing time':<40} | {e2e_p95:>8.2f} ticks | Target: < 3 | {slo_status}")
     else:
-        print(f"{'End-to-end p95 latency':<40} | {'N/A':>8} | Target: < 10ms | -")
+        print(f"{'E2E p95 processing time':<40} | {'N/A':>11} | Target: < 3 | -")
     
-    # SLO 2: Max queue depth < 100 events
-    max_queue = max(len(stage.queue) for stage in stages)
-    slo_status = "✓ PASS" if max_queue < 100 else "✗ FAIL"
-    print(f"{'Max queue depth':<40} | {max_queue:>8} events | Target: < 100 | {slo_status}")
+    # SLO 2: Store stage throughput > 40 events/tick
+    store_processed_this_tick = store_stage.metrics.processed if hasattr(store_stage.metrics, '_tick_processed') else 0
+    # Use incremental processed count - track last tick's cumulative
+    if not hasattr(pipeline, '_last_store_processed'):
+        pipeline._last_store_processed = 0
+    current_throughput = store_stage.metrics.processed - pipeline._last_store_processed
+    pipeline._last_store_processed = store_stage.metrics.processed
     
-    # SLO 3: Pipeline throughput > 150 events/tick
-    total_processed = sum(stage.metrics.processed for stage in stages)
-    slo_status = "✓ PASS" if total_processed > 150 else "✗ FAIL"
-    print(f"{'Total throughput':<40} | {total_processed:>8} events | Target: > 150 | {slo_status}")
+    slo_status = "✓ PASS" if current_throughput >= 40 else "✗ FAIL"
+    print(f"{'Store throughput (this tick)':<40} | {current_throughput:>8} events | Target: ≥ 40 | {slo_status}")
+    
+    print("=" * 95)
+    
+    # Monitoring Metrics with Health Zones
+    print()
+    print("=" * 95)
+    print("MONITORING METRICS - Queue Health")
+    print("-" * 95)
+    
+    # Define zone thresholds per stage (based on capacity)
+    zone_config = {
+        "ingest": {"green": 50, "orange": 150},      # capacity 100
+        "normalize": {"green": 40, "orange": 120},   # capacity 80
+        "enrich": {"green": 25, "orange": 75},       # capacity 50
+        "store": {"green": 30, "orange": 90},        # capacity 60
+    }
+    
+    for stage in stages:
+        queue_depth = len(stage.queue)
+        thresholds = zone_config.get(stage.name, {"green": 50, "orange": 150})
+        
+        if queue_depth <= thresholds["green"]:
+            health = "🟢 GREEN"
+        elif queue_depth <= thresholds["orange"]:
+            health = "🟠 ORANGE"
+        else:
+            health = "🔴 RED"
+        
+        print(f"{stage.name.upper():<12} | Queue: {queue_depth:>6} | Green: ≤{thresholds['green']:<3} | Orange: ≤{thresholds['orange']:<3} | {health}")
     
     print("=" * 95)
 

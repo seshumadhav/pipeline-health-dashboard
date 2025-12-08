@@ -44,6 +44,7 @@ def run_single_tick(
     *,
     log_events: bool = True,
     enforce_queue_invariant: bool = True,
+    current_tick: int = 0,
 ) -> None:
     """
     Simulate a single processing tick for one pipeline stage.
@@ -66,6 +67,9 @@ def run_single_tick(
 
     effective_capacity = int(stage.capacity_per_tick / stage.slowdown_factor)
 
+    # Clear output buffer from previous tick and prepare for this tick's output
+    stage.output_buffer.clear()
+    
     processed = 0
     while stage.queue and processed < effective_capacity:
         event = stage.queue.popleft()
@@ -80,6 +84,17 @@ def run_single_tick(
         )
 
         stage.metrics.record_latency(latency_ms)
+        
+        # Events processed by this stage go to output buffer (available next tick)
+        stage.output_buffer.append(event)
+        
+        # Track end-to-end processing time for the final stage (store)
+        if stage.name == "store" and event.ingestion_tick > 0 and current_tick > 0:
+            e2e_ticks = current_tick - event.ingestion_tick
+            stage.metrics.record_e2e_processing_time(e2e_ticks)
+            # DEBUG: Uncomment to trace e2e timing
+            # print(f"[DEBUG] Event {event.id} completed: ingestion_tick={event.ingestion_tick}, current_tick={current_tick}, e2e={e2e_ticks}")
+        
         log_event_processed(stage, event)
 
     # --- Capacity invariant ---
