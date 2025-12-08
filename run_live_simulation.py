@@ -117,8 +117,34 @@ def render_tick_table(pipeline: StageChain) -> None:
                 values.append("0")
         print(f"{'  ' + signal_type:<25} | {values[0]:<12} | {values[1]:<12} | {values[2]:<12} | {values[3]:<12}")
     
-    # Status
-    print(f"{'Status':<25} | {'OK':<12} | {'OK':<12} | {'OK':<12} | {'OK':<12}")
+    print("=" * 95)
+    
+    # SLO Metrics Table
+    print()
+    print("=" * 95)
+    print("SLO METRICS")
+    print("-" * 95)
+    
+    # SLO 1: End-to-end latency p95 < 10ms
+    e2e_latencies = []
+    for stage in stages:
+        e2e_latencies.extend(stage.metrics.latencies_ms)
+    if e2e_latencies:
+        e2e_p95 = compute_percentile(e2e_latencies, 0.95)
+        slo_status = "✓ PASS" if e2e_p95 < 10.0 else "✗ FAIL"
+        print(f"{'End-to-end p95 latency':<40} | {e2e_p95:>8.2f} ms | Target: < 10ms | {slo_status}")
+    else:
+        print(f"{'End-to-end p95 latency':<40} | {'N/A':>8} | Target: < 10ms | -")
+    
+    # SLO 2: Max queue depth < 100 events
+    max_queue = max(len(stage.queue) for stage in stages)
+    slo_status = "✓ PASS" if max_queue < 100 else "✗ FAIL"
+    print(f"{'Max queue depth':<40} | {max_queue:>8} events | Target: < 100 | {slo_status}")
+    
+    # SLO 3: Pipeline throughput > 150 events/tick
+    total_processed = sum(stage.metrics.processed for stage in stages)
+    slo_status = "✓ PASS" if total_processed > 150 else "✗ FAIL"
+    print(f"{'Total throughput':<40} | {total_processed:>8} events | Target: > 150 | {slo_status}")
     
     print("=" * 95)
 
