@@ -51,15 +51,15 @@ def render_tick_table(pipeline: StageChain) -> None:
     Render pipeline health as a compact table.
     """
     from collections import Counter
+    import random
     
     stages = pipeline.stages
     
     # Header
     print()
-    print("=" * 95)
     header = f"{'Metric':<25} | {'INGEST':<12} | {'NORMALIZE':<12} | {'ENRICH':<12} | {'STORE':<12}"
     print(header)
-    print(" " * 95)
+    print("---")
     
     # Processed
     values = [str(stage.metrics.processed) for stage in stages]
@@ -117,13 +117,11 @@ def render_tick_table(pipeline: StageChain) -> None:
                 values.append("0")
         print(f"{'  ' + signal_type:<25} | {values[0]:<12} | {values[1]:<12} | {values[2]:<12} | {values[3]:<12}")
     
-    print(" " * 95)
     
     # SLO Metrics Table
     print()
-    print("=" * 95)
     print("SLO METRICS")
-    print(" " * 95)
+    print("---")
     
     # Get store stage for end-to-end metrics
     store_stage = next(s for s in stages if s.name == "store")
@@ -146,14 +144,10 @@ def render_tick_table(pipeline: StageChain) -> None:
     
     slo_status = "🟢 PASS" if current_throughput >= 35 else "🔴 FAIL"
     print(f"{'Store throughput (this tick)':<40} | {current_throughput:>8} events | Target: ≥ 35 | {slo_status}")
-    
-    print(" " * 95)
-    
     # Monitoring Metrics with Health Zones
     print()
-    print("=" * 95)
     print("MONITORING METRICS - Queue Health")
-    print(" " * 95)
+    print("---")
     
     # Define zone thresholds per stage (relaxed for realistic ops)
     zone_config = {
@@ -176,7 +170,32 @@ def render_tick_table(pipeline: StageChain) -> None:
         
         print(f"{stage.name.upper():<12} | Queue: {queue_depth:>6} | Green: ≤{thresholds['green']:<3} | Orange: ≤{thresholds['orange']:<3} | {health}")
     
-    print(" " * 95)
+    # Human Inspection Section
+    print()
+    print("HUMAN INSPECTION NEEDED")
+    print("---")
+    
+    # Collect all events from all stages for inspection sampling
+    all_events = []
+    for stage in stages:
+        all_events.extend(stage.queue)
+    
+    # Sample a tiny percentage (0.5-2%) of events for human inspection
+    if all_events:
+        inspection_rate = random.uniform(0.005, 0.02)  # 0.5% to 2%
+        num_to_inspect = max(1, int(len(all_events) * inspection_rate))
+        events_for_inspection = random.sample(all_events, min(num_to_inspect, len(all_events)))
+        
+        if events_for_inspection:
+            print(f"Human Inspection needed: {len(events_for_inspection)} events")
+            for event in events_for_inspection[:10]:  # Show max 10 for readability
+                print(f"Event_id: {event.id} (type: {event.signal_type})")
+            if len(events_for_inspection) > 10:
+                print(f"... and {len(events_for_inspection) - 10} more events")
+        else:
+            print("Human Inspection needed: 0 events")
+    else:
+        print("Human Inspection needed: 0 events")
 
 
 def run_live_simulation(ticks: int = 25) -> None:
@@ -191,7 +210,9 @@ def run_live_simulation(ticks: int = 25) -> None:
     slowdown_factor = random.uniform(1.05, 1.15)
 
     for tick in range(1, ticks + 1):
-        print(f"\nTICK {tick}", flush=True)
+        print("\n\n")
+        print("*****")
+        print(f"TICK {tick}", flush=True)
 
         # Simulate enrichment degradation with recovery
         # (e.g., heavier ML inference, slower API, costlier analytical query)
