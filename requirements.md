@@ -71,3 +71,25 @@ This prototype explicitly does NOT aim to:
 
 - **Python 3.8+** standard library only
 - **No external packages required**
+
+## FAQ
+
+### Why build this at all?
+
+I wanted a concrete way to show how I think about day-to-day operations — not just is the system healthy now, but how it trends toward failure and where pressure shows up first.
+
+### Why keep it so simple?
+
+Because the hard part isn't concurrency or tooling — it's choosing the right signals and contracts early. I wanted the core dynamics to be obvious before adding realism.
+
+### Why these signal types?
+
+They map to three realities analytics platforms deal with: what happened (sales activity), what the field is seeing (field interaction), and broader context (market signals). The pipeline treats them the same for now; the distinction matters later for diagnosis and prioritization.
+
+### How would this evolve?
+
+Next steps would be latency sampling, tail metrics, then stage-specific failure modes and backpressure. Only after that would I introduce persistence or real tooling.
+
+### Why tools were not used?
+
+I haven't owned ClickHouse or dbt recently, but the mental model doesn't change: capacity, backpressure, tail latency, and correctness. Tooling is a ramp; operational instincts aren't. That's why I focused the prototype on fundamentals, not vendor choice.
