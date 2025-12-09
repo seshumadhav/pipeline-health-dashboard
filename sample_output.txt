@@ -1,0 +1,1325 @@
+
+
+
+*****
+TICK 1
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 21           | 0            | 0            | 0           
+Queue depth               | 0            | 0            | 0            | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.01         | -            | -            | -           
+  p95 (ms)                | 1.18         | -            | -            | -           
+  p99 (ms)                | 1.19         | -            | -            | -           
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 0            | 0           
+  market_signal           | 0            | 0            | 0            | 0           
+  sales_activity          | 0            | 0            | 0            | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:         N/A | Target: < 10 | -
+Store throughput (this tick):   0 events | Target: ≥ 35 | 🔴 FAIL
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:      0 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 0 events
+
+INCIDENT SUMMARY - TICK 1
+---
+  ⚠️  Store throughput: 0 events (Target: ≥ 35)
+
+
+
+
+*****
+TICK 2
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 108          | 21           | 0            | 0           
+Queue depth               | 0            | 0            | 0            | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.53         | -            | -           
+  p95 (ms)                | 1.17         | 2.96         | -            | -           
+  p99 (ms)                | 1.19         | 2.99         | -            | -           
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 0            | 0           
+  market_signal           | 0            | 0            | 0            | 0           
+  sales_activity          | 0            | 0            | 0            | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:         N/A | Target: < 10 | -
+Store throughput (this tick):   0 events | Target: ≥ 35 | 🔴 FAIL
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:      0 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 0 events
+
+INCIDENT SUMMARY - TICK 2
+---
+  ⚠️  Store throughput: 0 events (Target: ≥ 35)
+
+
+
+
+*****
+TICK 3
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 153          | 101          | 21           | 0           
+Queue depth               | 0            | 7            | 0            | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.53         | 2.98         | -           
+  p95 (ms)                | 1.18         | 2.96         | 3.68         | -           
+  p99 (ms)                | 1.19         | 2.99         | 3.69         | -           
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 1            | 0            | 0           
+  market_signal           | 0            | 5            | 0            | 0           
+  sales_activity          | 0            | 1            | 0            | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:         N/A | Target: < 10 | -
+Store throughput (this tick):   0 events | Target: ≥ 35 | 🔴 FAIL
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      7 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:      0 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309629483 (type: market_signal)
+
+INCIDENT SUMMARY - TICK 3
+---
+  ⚠️  Store throughput: 0 events (Target: ≥ 35)
+
+
+
+
+*****
+TICK 4
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 243          | 153          | 71           | 21          
+Queue depth               | 0            | 0            | 30           | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.51         | 2.97         | 1.06        
+  p95 (ms)                | 1.18         | 2.96         | 3.68         | 1.19        
+  p99 (ms)                | 1.20         | 2.99         | 3.70         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 6            | 0           
+  market_signal           | 0            | 0            | 16           | 0           
+  sales_activity          | 0            | 0            | 8            | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  3.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   21 events | Target: ≥ 35 | 🔴 FAIL
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:     30 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309629467 (type: sales_activity)
+
+INCIDENT SUMMARY - TICK 4
+---
+  ⚠️  Store throughput: 21 events (Target: ≥ 35)
+
+
+
+
+*****
+TICK 5
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 279          | 233          | 114          | 71          
+Queue depth               | 0            | 10           | 39           | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.50         | 2.97         | 0.98        
+  p95 (ms)                | 1.18         | 2.95         | 3.68         | 1.18        
+  p99 (ms)                | 1.20         | 2.98         | 3.70         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 4            | 20           | 0           
+  market_signal           | 0            | 5            | 8            | 0           
+  sales_activity          | 0            | 1            | 11           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  3.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:     10 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:     39 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309629843 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 5
+---
+No incidents
+
+
+
+
+*****
+TICK 6
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 304          | 279          | 157          | 114         
+Queue depth               | 0            | 0            | 76           | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.50         | 2.95         | 0.99        
+  p95 (ms)                | 1.18         | 2.96         | 3.66         | 1.18        
+  p99 (ms)                | 1.20         | 2.98         | 3.70         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 27           | 0           
+  market_signal           | 0            | 0            | 23           | 0           
+  sales_activity          | 0            | 0            | 26           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  4.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   43 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:     76 | Green: ≤60  | Orange: ≤150 | 🟠 ORANGE
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309630271 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 6
+---
+No incidents
+
+
+
+
+*****
+TICK 7
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 332          | 304          | 207          | 157         
+Queue depth               | 0            | 0            | 72           | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.51         | 2.98         | 0.98        
+  p95 (ms)                | 1.18         | 2.96         | 3.65         | 1.17        
+  p99 (ms)                | 1.20         | 2.98         | 3.70         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 26           | 0           
+  market_signal           | 0            | 0            | 26           | 0           
+  sales_activity          | 0            | 0            | 20           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  4.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   43 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:     72 | Green: ≤60  | Orange: ≤150 | 🟠 ORANGE
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309630266 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 7
+---
+No incidents
+
+
+
+
+*****
+TICK 8
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 376          | 332          | 257          | 207         
+Queue depth               | 0            | 0            | 47           | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.51         | 3.01         | 0.99        
+  p95 (ms)                | 1.18         | 2.96         | 3.64         | 1.18        
+  p99 (ms)                | 1.20         | 2.98         | 3.70         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 17           | 0           
+  market_signal           | 0            | 0            | 16           | 0           
+  sales_activity          | 0            | 0            | 14           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  4.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:     47 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309631035 (type: sales_activity)
+
+INCIDENT SUMMARY - TICK 8
+---
+No incidents
+
+
+
+
+*****
+TICK 9
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 409          | 376          | 307          | 257         
+Queue depth               | 0            | 0            | 25           | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.51         | 2.99         | 0.99        
+  p95 (ms)                | 1.18         | 2.95         | 3.64         | 1.18        
+  p99 (ms)                | 1.20         | 2.98         | 3.70         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 5            | 0           
+  market_signal           | 0            | 0            | 8            | 0           
+  sales_activity          | 0            | 0            | 12           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  5.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:     25 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309631431 (type: market_signal)
+
+INCIDENT SUMMARY - TICK 9
+---
+No incidents
+
+
+
+
+*****
+TICK 10
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 431          | 409          | 357          | 307         
+Queue depth               | 0            | 0            | 19           | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.51         | 2.97         | 0.99        
+  p95 (ms)                | 1.17         | 2.95         | 3.64         | 1.18        
+  p99 (ms)                | 1.20         | 2.98         | 3.70         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 5            | 0           
+  market_signal           | 0            | 0            | 8            | 0           
+  sales_activity          | 0            | 0            | 6            | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  5.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:     19 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309631864 (type: sales_activity)
+
+INCIDENT SUMMARY - TICK 10
+---
+No incidents
+
+
+
+
+*****
+TICK 11
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 531          | 431          | 407          | 357         
+Queue depth               | 34           | 0            | 2            | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.52         | 2.99         | 0.99        
+  p95 (ms)                | 1.18         | 2.95         | 3.64         | 1.18        
+  p99 (ms)                | 1.20         | 2.98         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 10           | 0            | 1            | 0           
+  market_signal           | 13           | 0            | 1            | 0           
+  sales_activity          | 11           | 0            | 0            | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  5.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:     34 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:      2 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309633146 (type: sales_activity)
+
+INCIDENT SUMMARY - TICK 11
+---
+No incidents
+
+
+
+
+*****
+TICK 12
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 631          | 511          | 431          | 407         
+Queue depth               | 68           | 20           | 0            | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.51         | 2.99         | 0.99        
+  p95 (ms)                | 1.18         | 2.95         | 3.64         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 21           | 6            | 0            | 0           
+  market_signal           | 30           | 6            | 0            | 0           
+  sales_activity          | 17           | 8            | 0            | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  5.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:     68 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:     20 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:      0 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309633126 (type: sales_activity)
+
+INCIDENT SUMMARY - TICK 12
+---
+No incidents
+
+
+
+
+*****
+TICK 13
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 731          | 591          | 481          | 431         
+Queue depth               | 75           | 40           | 30           | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.51         | 2.99         | 0.99        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 29           | 10           | 10           | 0           
+  market_signal           | 28           | 10           | 9            | 0           
+  sales_activity          | 18           | 20           | 11           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  5.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   24 events | Target: ≥ 35 | 🔴 FAIL
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:     75 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:     40 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:     30 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309633498 (type: sales_activity)
+
+INCIDENT SUMMARY - TICK 13
+---
+  ⚠️  Store throughput: 24 events (Target: ≥ 35)
+
+
+
+
+*****
+TICK 14
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 831          | 671          | 531          | 481         
+Queue depth               | 11           | 60           | 60           | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.51         | 2.99         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.64         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 3            | 17           | 18           | 0           
+  market_signal           | 3            | 25           | 20           | 0           
+  sales_activity          | 5            | 18           | 22           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  5.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:     11 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:     60 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:     60 | Green: ≤60  | Orange: ≤150 | 🟢 GREEN
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309633467 (type: sales_activity)
+
+INCIDENT SUMMARY - TICK 14
+---
+No incidents
+
+
+
+
+*****
+TICK 15
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 931          | 751          | 581          | 531         
+Queue depth               | 17           | 80           | 90           | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.50         | 3.01         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 9            | 34           | 29           | 0           
+  market_signal           | 4            | 25           | 30           | 0           
+  sales_activity          | 4            | 21           | 31           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  5.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:     17 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:     80 | Green: ≤70  | Orange: ≤180 | 🟠 ORANGE
+ENRICH       | Queue:     90 | Green: ≤60  | Orange: ≤150 | 🟠 ORANGE
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309633937 (type: market_signal)
+
+INCIDENT SUMMARY - TICK 15
+---
+No incidents
+
+
+
+
+*****
+TICK 16
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 960          | 831          | 631          | 581         
+Queue depth               | 0            | 100          | 120          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.51         | 2.99         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.64         | 1.18        
+  p99 (ms)                | 1.20         | 2.98         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 28           | 38           | 0           
+  market_signal           | 0            | 27           | 52           | 0           
+  sales_activity          | 0            | 45           | 30           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  5.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:    100 | Green: ≤70  | Orange: ≤180 | 🟠 ORANGE
+ENRICH       | Queue:    120 | Green: ≤60  | Orange: ≤150 | 🟠 ORANGE
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 3 events
+Event_id: 1765309633565 (type: sales_activity)
+Event_id: 1765309633899 (type: market_signal)
+Event_id: 1765309633869 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 16
+---
+No incidents
+
+
+
+
+*****
+TICK 17
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1060         | 911          | 681          | 631         
+Queue depth               | 39           | 49           | 150          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.51         | 2.99         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.98         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 12           | 21           | 55           | 0           
+  market_signal           | 12           | 14           | 58           | 0           
+  sales_activity          | 15           | 14           | 37           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  5.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:     39 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:     49 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    150 | Green: ≤60  | Orange: ≤150 | 🟠 ORANGE
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 4 events
+Event_id: 1765309634772 (type: market_signal)
+Event_id: 1765309634759 (type: sales_activity)
+Event_id: 1765309633959 (type: field_interaction)
+Event_id: 1765309633865 (type: sales_activity)
+
+INCIDENT SUMMARY - TICK 17
+---
+No incidents
+
+
+
+
+*****
+TICK 18
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1123         | 991          | 731          | 681         
+Queue depth               | 0            | 69           | 180          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.52         | 2.99         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 19           | 64           | 0           
+  market_signal           | 0            | 22           | 54           | 0           
+  sales_activity          | 0            | 28           | 62           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  6.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:     69 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    180 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 3 events
+Event_id: 1765309634736 (type: market_signal)
+Event_id: 1765309634702 (type: sales_activity)
+Event_id: 1765309633913 (type: market_signal)
+
+INCIDENT SUMMARY - TICK 18
+---
+  ⚠️  ENRICH queue: 180 events (RED zone > 150)
+
+
+
+
+*****
+TICK 19
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1223         | 1071         | 781          | 731         
+Queue depth               | 43           | 52           | 210          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 0.99         | 2.51         | 2.99         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 15           | 17           | 75           | 0           
+  market_signal           | 17           | 17           | 61           | 0           
+  sales_activity          | 11           | 18           | 74           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  6.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:     43 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:     52 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    210 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 3 events
+Event_id: 1765309635609 (type: sales_activity)
+Event_id: 1765309634713 (type: field_interaction)
+Event_id: 1765309635091 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 19
+---
+  ⚠️  ENRICH queue: 210 events (RED zone > 150)
+
+
+
+
+*****
+TICK 20
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1289         | 1151         | 831          | 781         
+Queue depth               | 0            | 72           | 240          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.51         | 2.99         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.64         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 23           | 75           | 0           
+  market_signal           | 0            | 23           | 69           | 0           
+  sales_activity          | 0            | 26           | 96           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  7.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:     72 | Green: ≤70  | Orange: ≤180 | 🟠 ORANGE
+ENRICH       | Queue:    240 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 5 events
+Event_id: 1765309635552 (type: market_signal)
+Event_id: 1765309634697 (type: market_signal)
+Event_id: 1765309634700 (type: market_signal)
+Event_id: 1765309635506 (type: market_signal)
+Event_id: 1765309636359 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 20
+---
+  ⚠️  ENRICH queue: 240 events (RED zone > 150)
+
+
+
+
+*****
+TICK 21
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1318         | 1231         | 881          | 831         
+Queue depth               | 0            | 58           | 270          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.00         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.64         | 1.18        
+  p99 (ms)                | 1.19         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 21           | 92           | 0           
+  market_signal           | 0            | 22           | 81           | 0           
+  sales_activity          | 0            | 15           | 97           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  7.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:     58 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    270 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 3 events
+Event_id: 1765309634736 (type: market_signal)
+Event_id: 1765309636334 (type: field_interaction)
+Event_id: 1765309636433 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 21
+---
+  ⚠️  ENRICH queue: 270 events (RED zone > 150)
+
+
+
+
+*****
+TICK 22
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1337         | 1311         | 931          | 881         
+Queue depth               | 0            | 7            | 300          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.01         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.64         | 1.18        
+  p99 (ms)                | 1.19         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 1            | 104          | 0           
+  market_signal           | 0            | 5            | 96           | 0           
+  sales_activity          | 0            | 1            | 100          | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  7.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      7 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    300 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 2 events
+Event_id: 1765309634768 (type: field_interaction)
+Event_id: 1765309637152 (type: market_signal)
+
+INCIDENT SUMMARY - TICK 22
+---
+  ⚠️  ENRICH queue: 300 events (RED zone > 150)
+
+
+
+
+*****
+TICK 23
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1402         | 1337         | 981          | 931         
+Queue depth               | 0            | 0            | 330          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.02         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.19         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 108          | 0           
+  market_signal           | 0            | 0            | 113          | 0           
+  sales_activity          | 0            | 0            | 109          | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  8.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    330 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 4 events
+Event_id: 1765309636415 (type: field_interaction)
+Event_id: 1765309635627 (type: sales_activity)
+Event_id: 1765309635919 (type: sales_activity)
+Event_id: 1765309635614 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 23
+---
+  ⚠️  ENRICH queue: 330 events (RED zone > 150)
+
+
+
+
+*****
+TICK 24
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1440         | 1402         | 1031         | 981         
+Queue depth               | 0            | 0            | 306          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.02         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 102          | 0           
+  market_signal           | 0            | 0            | 106          | 0           
+  sales_activity          | 0            | 0            | 98           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  8.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    306 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 5 events
+Event_id: 1765309636331 (type: field_interaction)
+Event_id: 1765309637543 (type: sales_activity)
+Event_id: 1765309636399 (type: sales_activity)
+Event_id: 1765309637134 (type: field_interaction)
+Event_id: 1765309636341 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 24
+---
+  ⚠️  ENRICH queue: 306 events (RED zone > 150)
+
+
+
+
+*****
+TICK 25
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1462         | 1440         | 1081         | 1031        
+Queue depth               | 0            | 0            | 321          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.02         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 107          | 0           
+  market_signal           | 0            | 0            | 114          | 0           
+  sales_activity          | 0            | 0            | 100          | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  8.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    321 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 6 events
+Event_id: 1765309636736 (type: sales_activity)
+Event_id: 1765309636320 (type: market_signal)
+Event_id: 1765309636339 (type: field_interaction)
+Event_id: 1765309638011 (type: market_signal)
+Event_id: 1765309636389 (type: sales_activity)
+Event_id: 1765309636739 (type: market_signal)
+
+INCIDENT SUMMARY - TICK 25
+---
+  ⚠️  ENRICH queue: 321 events (RED zone > 150)
+
+
+
+
+*****
+TICK 26
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1527         | 1462         | 1131         | 1081        
+Queue depth               | 0            | 0            | 309          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.01         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 103          | 0           
+  market_signal           | 0            | 0            | 113          | 0           
+  sales_activity          | 0            | 0            | 93           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  9.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    309 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 5 events
+Event_id: 1765309636324 (type: field_interaction)
+Event_id: 1765309636361 (type: sales_activity)
+Event_id: 1765309637138 (type: sales_activity)
+Event_id: 1765309637552 (type: sales_activity)
+Event_id: 1765309636423 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 26
+---
+  ⚠️  ENRICH queue: 309 events (RED zone > 150)
+
+
+
+
+*****
+TICK 27
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1544         | 1527         | 1181         | 1131        
+Queue depth               | 0            | 0            | 281          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.01         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 90           | 0           
+  market_signal           | 0            | 0            | 103          | 0           
+  sales_activity          | 0            | 0            | 88           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  9.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    281 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 3 events
+Event_id: 1765309637131 (type: sales_activity)
+Event_id: 1765309636720 (type: field_interaction)
+Event_id: 1765309638763 (type: sales_activity)
+
+INCIDENT SUMMARY - TICK 27
+---
+  ⚠️  ENRICH queue: 281 events (RED zone > 150)
+
+
+
+
+*****
+TICK 28
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1576         | 1544         | 1231         | 1181        
+Queue depth               | 0            | 0            | 296          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.01         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 94           | 0           
+  market_signal           | 0            | 0            | 108          | 0           
+  sales_activity          | 0            | 0            | 94           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  9.00 ticks | Target: < 10 | 🟢 PASS
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    296 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 2 events
+Event_id: 1765309637552 (type: sales_activity)
+Event_id: 1765309638775 (type: sales_activity)
+
+INCIDENT SUMMARY - TICK 28
+---
+  ⚠️  ENRICH queue: 296 events (RED zone > 150)
+
+
+
+
+*****
+TICK 29
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1617         | 1576         | 1281         | 1231        
+Queue depth               | 0            | 0            | 263          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.01         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 86           | 0           
+  market_signal           | 0            | 0            | 91           | 0           
+  sales_activity          | 0            | 0            | 86           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  10.00 ticks | Target: < 10 | 🔴 FAIL
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    263 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 3 events
+Event_id: 1765309637968 (type: field_interaction)
+Event_id: 1765309637960 (type: sales_activity)
+Event_id: 1765309639187 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 29
+---
+  ⚠️  E2E p95 processing time: 10.00 ticks (Target: < 10)
+  ⚠️  ENRICH queue: 263 events (RED zone > 150)
+
+
+
+
+*****
+TICK 30
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1650         | 1617         | 1331         | 1281        
+Queue depth               | 0            | 0            | 245          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.00         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 0            | 0            | 77           | 0           
+  market_signal           | 0            | 0            | 86           | 0           
+  sales_activity          | 0            | 0            | 82           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  10.00 ticks | Target: < 10 | 🔴 FAIL
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      0 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    245 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 4 events
+Event_id: 1765309639192 (type: market_signal)
+Event_id: 1765309639191 (type: sales_activity)
+Event_id: 1765309640010 (type: market_signal)
+Event_id: 1765309640008 (type: market_signal)
+
+INCIDENT SUMMARY - TICK 30
+---
+  ⚠️  E2E p95 processing time: 10.00 ticks (Target: < 10)
+  ⚠️  ENRICH queue: 245 events (RED zone > 150)
+
+
+
+
+*****
+TICK 31
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1750         | 1650         | 1381         | 1331        
+Queue depth               | 5            | 0            | 236          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.01         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 3            | 0            | 76           | 0           
+  market_signal           | 1            | 0            | 84           | 0           
+  sales_activity          | 1            | 0            | 76           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  10.00 ticks | Target: < 10 | 🔴 FAIL
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:      5 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:      0 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    236 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 4 events
+Event_id: 1765309637993 (type: sales_activity)
+Event_id: 1765309639190 (type: sales_activity)
+Event_id: 1765309640407 (type: field_interaction)
+Event_id: 1765309639216 (type: field_interaction)
+
+INCIDENT SUMMARY - TICK 31
+---
+  ⚠️  E2E p95 processing time: 10.00 ticks (Target: < 10)
+  ⚠️  ENRICH queue: 236 events (RED zone > 150)
+
+
+
+
+*****
+TICK 32
+
+Metric                    | INGEST       | NORMALIZE    | ENRICH       | STORE       
+---
+Processed                 | 1850         | 1730         | 1431         | 1381        
+Queue depth               | 44           | 20           | 219          | 0           
+Latency                   |              |              |              |             
+  p50 (ms)                | 1.00         | 2.50         | 3.02         | 1.00        
+  p95 (ms)                | 1.18         | 2.95         | 3.63         | 1.18        
+  p99 (ms)                | 1.20         | 2.99         | 3.69         | 1.20        
+Signals                   |              |              |              |             
+  field_interaction       | 22           | 5            | 73           | 0           
+  market_signal           | 8            | 4            | 75           | 0           
+  sales_activity          | 14           | 11           | 71           | 0           
+
+SLO METRICS
+---
+E2E p95 processing time:  10.00 ticks | Target: < 10 | 🔴 FAIL
+Store throughput (this tick):   50 events | Target: ≥ 35 | 🟢 PASS
+
+MONITORING METRICS - Queue Health
+---
+INGEST       | Queue:     44 | Green: ≤80  | Orange: ≤200 | 🟢 GREEN
+NORMALIZE    | Queue:     20 | Green: ≤70  | Orange: ≤180 | 🟢 GREEN
+ENRICH       | Queue:    219 | Green: ≤60  | Orange: ≤150 | 🔴 RED
+STORE        | Queue:      0 | Green: ≤50  | Orange: ≤120 | 🟢 GREEN
+
+HUMAN INSPECTION NEEDED
+---
+Human Inspection needed: 1 events
+Event_id: 1765309640005 (type: sales_activity)
+
+INCIDENT SUMMARY - TICK 32
+---
+  ⚠️  E2E p95 processing time: 10.00 ticks (Target: < 10)
+  ⚠️  ENRICH queue: 219 events (RED zone > 150)
+
